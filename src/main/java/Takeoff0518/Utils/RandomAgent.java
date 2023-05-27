@@ -3,6 +3,9 @@ package Takeoff0518.Utils;
 import java.util.Random;
 
 public class RandomAgent {
+    /**
+     * @return A random UserAgent
+     */
     public static String createRandomUSERAGENTS() {
         String[] USER_AGENTS = {
                 "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 2.0.50727; Media Center PC 6.0)",

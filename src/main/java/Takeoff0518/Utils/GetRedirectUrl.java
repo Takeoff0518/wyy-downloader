@@ -27,7 +27,7 @@ public class GetRedirectUrl {
                 responseCode == HttpURLConnection.HTTP_MOVED_PERM) {
             returnVal = connection.getHeaderField("Location");
         } else if (responseCode == HttpURLConnection.HTTP_OK) {
-            returnVal = "Null";
+            returnVal = "null";
         } else {
             returnVal = String.valueOf(responseCode);
         }
