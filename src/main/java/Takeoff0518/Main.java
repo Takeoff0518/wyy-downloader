@@ -1,14 +1,10 @@
 package Takeoff0518;
 
 import Takeoff0518.Song.CloudMusic;
-import Takeoff0518.Utils.Downloader;
-import Takeoff0518.Utils.GetLyrics;
-import Takeoff0518.Utils.GetRedirectUrl;
 import Takeoff0518.Utils.RandomAgent;
 
 import java.net.HttpURLConnection;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -16,13 +12,13 @@ public class Main {
         System.out.print("id=");
         Scanner scanner = new Scanner(System.in);
         int id = scanner.nextInt();
-        CloudMusic song=new CloudMusic(id);
+        CloudMusic song = new CloudMusic(id);
         song.reqMusicURL(RandomAgent.createRandomUSERAGENTS());
-        if(song.getMusicStatueCode()== HttpURLConnection.HTTP_MOVED_TEMP ||
-           song.getMusicStatueCode()== HttpURLConnection.HTTP_MOVED_PERM){
-            if(Objects.equals(song.getMusicURL(), "http://music.163.com/404")){
+        if (song.getMusicStatueCode() == HttpURLConnection.HTTP_MOVED_TEMP ||
+                song.getMusicStatueCode() == HttpURLConnection.HTTP_MOVED_PERM) {
+            if (Objects.equals(song.getMusicURL(), "http://music.163.com/404")) {
                 System.out.println("Redirect successfully, but URL=\"http://music.163.com/404\".\nMake sure it isn't a VIP song.");
-            }else {
+            } else {
                 System.out.println("Redirect successfully,URL=\"" + song.getMusicURL() + "\"");
                 System.out.println("Do you wang to download it? (Y/N)");
                 scanner = new Scanner(System.in);
@@ -37,9 +33,9 @@ public class Main {
                     System.out.println("Download finished!");
                 }
             }
-        }else if(song.getMusicStatueCode()==HttpURLConnection.HTTP_OK){
+        } else if (song.getMusicStatueCode() == HttpURLConnection.HTTP_OK) {
             System.out.println("No redirect.");
-        }else{
+        } else {
             System.out.println("Failed, code=" + song.getMusicStatueCode());
         }
     }
