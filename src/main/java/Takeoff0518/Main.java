@@ -13,9 +13,10 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int id = scanner.nextInt();
         CloudMusic song = new CloudMusic(id);
-        song.reqMusicURL(RandomAgent.createRandomUSERAGENTS());
-        if (song.getMusicStatueCode() == HttpURLConnection.HTTP_MOVED_TEMP ||
-                song.getMusicStatueCode() == HttpURLConnection.HTTP_MOVED_PERM) {
+        song.connect(RandomAgent.createRandomUSERAGENTS());
+//        song.reqMusicURL(RandomAgent.createRandomUSERAGENTS());
+        if (song.getMusicResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP ||
+                song.getMusicResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
             if (Objects.equals(song.getMusicURL(), "http://music.163.com/404")) {
                 System.out.println("Redirect successfully, but URL=\"http://music.163.com/404\".\nMake sure it isn't a VIP song.");
             } else {
@@ -24,7 +25,7 @@ public class Main {
                 scanner = new Scanner(System.in);
                 String opt = scanner.next();
                 if (Objects.equals(opt, "Y") || Objects.equals(opt, "y")) {
-                    song.reqLyric(RandomAgent.createRandomUSERAGENTS());
+//                    song.reqLyric(RandomAgent.createRandomUSERAGENTS());
                     System.out.println("Download Started!");
                     System.out.println("Downloading MP3...");
                     song.downloadMusic("file.mp3");
@@ -33,10 +34,10 @@ public class Main {
                     System.out.println("Download finished!");
                 }
             }
-        } else if (song.getMusicStatueCode() == HttpURLConnection.HTTP_OK) {
+        } else if (song.getMusicResponseCode() == HttpURLConnection.HTTP_OK) {
             System.out.println("No redirect.");
         } else {
-            System.out.println("Failed, code=" + song.getMusicStatueCode());
+            System.out.println("Failed, code=" + song.getMusicResponseCode());
         }
     }
 }

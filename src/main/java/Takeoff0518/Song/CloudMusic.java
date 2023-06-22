@@ -11,6 +11,7 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 
 public class CloudMusic {
+    CloudMusic me=this;
     static int musicStatueCode;
     static int lyricStatueCode;
     static int lyricSongStatus;
@@ -54,7 +55,7 @@ public class CloudMusic {
      * @return HTTP response code <p>
      * like 200(HTTP_OK)
      */
-    public int getMusicStatueCode() {
+    public int getMusicResponseCode() {
         return musicStatueCode;
     }
 
@@ -106,6 +107,17 @@ public class CloudMusic {
         FileUtils.writeStringToFile(new File(fileName), lyricLRC, StandardCharsets.UTF_8);
     }
 
+
+    public void connect(String userAgent){
+        try{
+            me.reqMusicURL(userAgent);
+            me.reqLyric(userAgent);
+            me.reqTitle(userAgent);
+        } catch (Exception e) {
+            System.out.println("Error!");
+            e.printStackTrace();
+        }
+    }
     /**
      * @param userAgent User-agent
      * @throws Exception Exception
