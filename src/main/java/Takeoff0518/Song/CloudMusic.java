@@ -1,5 +1,6 @@
 package Takeoff0518.Song;
 
+import Takeoff0518.LiteLogger.Logger;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
@@ -11,17 +12,18 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 
 public class CloudMusic {
-    CloudMusic me=this;
-    static int musicStatueCode;
+    static int musicResponseCode;
     static int lyricStatueCode;
     static int lyricSongStatus;
     static int lyricVersion;
-
     static int musicID;
     static String musicURL;
     static String lyricLRC;
     static String lyricJSON;
     static String musicTitle;
+    static boolean isAvailable = false;
+    //    static boolean available = false;
+    CloudMusic me = this;
 
     public CloudMusic(int id) {
         musicID = id;
@@ -56,7 +58,7 @@ public class CloudMusic {
      * like 200(HTTP_OK)
      */
     public int getMusicResponseCode() {
-        return musicStatueCode;
+        return musicResponseCode;
     }
 
     /**
@@ -84,6 +86,13 @@ public class CloudMusic {
     }
 
     /**
+     * @return If this song is a VIP song, it will be true; <p> Otherwise, it will be false;
+     */
+    public boolean getAvailable() {
+        return isAvailable;
+    }
+
+    /**
      * @param fileName File name like "file.mp3"
      * @throws IOException Exception
      */
@@ -108,16 +117,19 @@ public class CloudMusic {
     }
 
 
-    public void connect(String userAgent){
-        try{
+    public void connect(String userAgent) {
+        try {
             me.reqMusicURL(userAgent);
-            me.reqLyric(userAgent);
-            me.reqTitle(userAgent);
+            if (!isAvailable) {
+                me.reqLyric(userAgent);
+                me.reqTitle(userAgent);
+            }
         } catch (Exception e) {
-            System.out.println("Error!");
+            Logger.log("err", "ERROR!");
             e.printStackTrace();
         }
     }
+
     /**
      * @param userAgent User-agent
      * @throws Exception Exception
@@ -130,10 +142,11 @@ public class CloudMusic {
         connection.setInstanceFollowRedirects(false);
         connection.setRequestMethod("GET");
         connection.connect();
-        musicStatueCode = connection.getResponseCode();
-        if (musicStatueCode == HttpURLConnection.HTTP_MOVED_TEMP || musicStatueCode == HttpURLConnection.HTTP_MOVED_PERM) {
+        musicResponseCode = connection.getResponseCode();
+        if (musicResponseCode == HttpURLConnection.HTTP_MOVED_TEMP || musicResponseCode == HttpURLConnection.HTTP_MOVED_PERM) {
             musicURL = connection.getHeaderField("Location");
-        }
+            isAvailable = musicURL.equals("http://music.163.com/404");
+        } else isAvailable = false;
         connection.disconnect();
     }
 
@@ -176,7 +189,7 @@ public class CloudMusic {
      * Get webpage's title to get song's name & singer<p>
      * Target: https://music.163.com/#/song?id=
      *
-     * @param userAgent
+     * @param userAgent User-agent
      */
     public void reqTitle(String userAgent) {
         try {
