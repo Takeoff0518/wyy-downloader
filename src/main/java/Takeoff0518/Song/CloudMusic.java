@@ -122,7 +122,7 @@ public class CloudMusic {
             me.reqMusicURL(userAgent);
             if (!isAvailable) {
                 me.reqLyric(userAgent);
-                me.reqTitle(userAgent);
+//                me.reqTitle(userAgent);
             }
         } catch (Exception e) {
             Logger.log("err", "ERROR!");
